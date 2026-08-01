@@ -5,3 +5,5 @@ torchvision
 torchaudio
 
 gradio
+
+matplotlib
