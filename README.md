@@ -20,6 +20,8 @@ https://github.com/user-attachments/assets/7930a9cb-5e3c-42d5-bec3-a4fc0c6973ad
 
 With Graph
 <img width="1919" height="971" alt="image" src="https://github.com/user-attachments/assets/8fe55a75-087b-4355-b833-f02d0386f7f5" />
+<img width="1900" height="989" alt="image" src="https://github.com/user-attachments/assets/2870b3d1-cf17-4fb6-8d85-d02c1e87ca39" />
+
 
 
 
