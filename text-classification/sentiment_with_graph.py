@@ -45,17 +45,17 @@ def analyze_reviews(file_path: str, review_column: str = "Reviews") -> pd.DataFr
 
 def get_sentiment_bar_chart(df: pd.DataFrame, sentiment_column: str = "Sentiment"):
     """
-    Build a bar chart showing the count of each sentiment category.
+    Build a bar chart and a pie chart showing the count of each sentiment category.
 
     Returns:
-        A matplotlib.figure.Figure object showing sentiment counts.
+        A tuple of (bar_figure, pie_figure), both matplotlib.figure.Figure objects.
     """
     if sentiment_column not in df.columns:
         raise ValueError(f"Column '{sentiment_column}' not found in DataFrame.")
 
     sentiment_counts = df[sentiment_column].value_counts()
 
-    fig, ax = plt.subplots(figsize=(6, 4))
+    figbar, ax = plt.subplots(figsize=(6, 4))
     bars = ax.bar(
         sentiment_counts.index, sentiment_counts.values, color=["#4CAF50", "#F44336"]
     )
@@ -74,20 +74,34 @@ def get_sentiment_bar_chart(df: pd.DataFrame, sentiment_column: str = "Sentiment
             ha="center",
         )
 
-    fig.tight_layout()
-    return fig
+    figbar.tight_layout()
+
+    figpi, ax = plt.subplots(figsize=(6, 4))
+    ax.pie(
+        sentiment_counts.values,
+        labels=sentiment_counts.index,
+        autopct="%1.1f%%",
+        colors=["#4CAF50", "#F44336"],
+        startangle=90,
+    )
+
+    ax.set_title("Sentiment Distribution")
+    ax.axis("equal")  # keeps the pie circular
+
+    figpi.tight_layout()
+    return figbar, figpi
 
 
 def process_file(file):
     if file is None:
-        return pd.DataFrame({"Error": ["Please upload an Excel file."]}), None
+        return pd.DataFrame({"Error": ["Please upload an Excel file."]}), None, None
 
     try:
         df = analyze_reviews(file.name)
-        chart = get_sentiment_bar_chart(df)
-        return df, chart
+        figbar, figpi = get_sentiment_bar_chart(df)
+        return df, figbar, figpi
     except Exception as e:
-        return pd.DataFrame({"Error": [str(e)]}), None
+        return pd.DataFrame({"Error": [str(e)]}), None, None
 
 
 with gr.Blocks(title="Review Sentiment Analyzer") as demo:
@@ -100,10 +114,13 @@ with gr.Blocks(title="Review Sentiment Analyzer") as demo:
     submit_btn = gr.Button("Analyze")
 
     output_table = gr.Dataframe(label="Reviews with Sentiment")
-    output_chart = gr.Plot(label="Sentiment Distribution")
+    output_bar = gr.Plot(label="Sentiment Distribution (Bar)")
+    output_pie = gr.Plot(label="Sentiment Distribution (Pie)")
 
     submit_btn.click(
-        fn=process_file, inputs=file_input, outputs=[output_table, output_chart]
+        fn=process_file,
+        inputs=file_input,
+        outputs=[output_table, output_bar, output_pie],
     )
 
 if __name__ == "__main__":
