@@ -14,5 +14,13 @@ Working Video
 
 https://github.com/user-attachments/assets/194d86df-08cb-42d7-88de-736c008a2a26
 
+UI With Gradio
+
+https://github.com/user-attachments/assets/7930a9cb-5e3c-42d5-bec3-a4fc0c6973ad
+
+
+
+
+
 
 
